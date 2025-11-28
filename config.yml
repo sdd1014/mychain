@@ -1,27 +1,55 @@
-version: 1
-validation: sovereign
-default_denom: stake
+# MyChain 区块链配置文件
+# 这个文件定义了区块链启动时的初始状态
+
+version: 1                    # 配置文件版本
+validation: sovereign         # 验证模式：独立链（不是消费链）
+default_denom: stake          # 默认代币单位，用于手续费和质押
+
+# 初始账户配置
+# 这些账户会在链启动时自动创建，并分配初始余额
 accounts: 
-- name: alice
-  coins:
-  - 20000token
-  - 200000000stake
-- name: bob
-  coins:
-  - 10000token
-  - 100000000stake
+- name: alice                 # 账户名称：alice
+  coins:                      # 初始余额
+  - 20000token               # 20000 个 token（自定义代币）
+  - 200000000stake           # 200000000 个 stake（质押代币，约 200 stake）
+  
+- name: bob                   # 账户名称：bob
+  coins:                      # 初始余额
+  - 10000token               # 10000 个 token
+  - 100000000stake           # 100000000 个 stake（约 100 stake）
+
+# 客户端配置
 client:
   openapi:
-    path: docs/static/openapi.json
+    path: docs/static/openapi.json  # OpenAPI 文档路径
+
+# 水龙头配置（用于测试网分发代币）
 faucet:
-  name: bob
-  coins:
-  - 5token
-  - 100000stake
+  name: bob                   # 水龙头使用 bob 账户
+  coins:                      # 每次水龙头请求分发的代币数量
+  - 5token                   # 5 个 token
+  - 100000stake              # 100000 个 stake
+
+# 验证者配置
+# 验证者负责出块和共识，需要质押代币
 validators:
-- name: alice
-  bonded: 100000000stake
-- name: validator1
-  bonded: 200000000stake
-- name: validator2
-  bonded: 100000000stake
+- name: alice                 # 验证者 1：使用 alice 账户
+  bonded: 100000000stake     # 质押数量：100000000 stake（约 100 stake）
+  
+- name: validator1            # 验证者 2：validator1
+  bonded: 200000000stake     # 质押数量：200000000 stake（约 200 stake）
+  
+- name: validator2            # 验证者 3：validator2
+  bonded: 100000000stake     # 质押数量：100000000 stake（约 100 stake）
+
+# 说明：
+# 1. token 是我们自定义的代币，可以用于转账、铸造等操作
+# 2. stake 是系统代币，用于：
+#    - 支付交易手续费（gas）
+#    - 质押给验证者参与共识
+#    - 链上治理投票
+# 3. 代币单位：
+#    - 1 token = 1,000,000 基本单位（默认 6 位小数）
+#    - stake 通常不使用小数
+# 4. 所有账户在链启动时自动创建，无需手动添加
+# 5. 验证者会自动从对应账户质押指定数量的 stake

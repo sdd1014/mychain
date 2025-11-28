@@ -46,6 +46,7 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
 
 	"mychain/docs"
+	tokenmodulekeeper "mychain/x/token/keeper"
 )
 
 const (
@@ -98,7 +99,8 @@ type App struct {
 	TransferKeeper      ibctransferkeeper.Keeper
 
 	// simulation manager
-	sm *module.SimulationManager
+	sm          *module.SimulationManager
+	TokenKeeper tokenmodulekeeper.Keeper
 }
 
 func init() {
@@ -171,6 +173,7 @@ func New(
 		&app.ConsensusParamsKeeper,
 		&app.CircuitBreakerKeeper,
 		&app.ParamsKeeper,
+		&app.TokenKeeper,
 	); err != nil {
 		panic(err)
 	}
